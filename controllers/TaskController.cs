@@ -59,7 +59,23 @@ namespace ToDoApi.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(tarea).State = EntityState.Modified;
+            var existingTask = await _context.Tareas.Include(t => t.Usuario).FirstOrDefaultAsync(t => t.ID == id);
+
+            if (existingTask == null)
+            {
+                return NotFound();
+            }
+
+            // Update task fields
+            existingTask.Descripcion = tarea.Descripcion;
+            existingTask.Fecha = tarea.Fecha;
+
+            // Update user fields
+            if (existingTask.Usuario != null && tarea.Usuario != null)
+            {
+                existingTask.Usuario.Nombre = tarea.Usuario.Nombre;
+                existingTask.Usuario.Email = tarea.Usuario.Email;
+            }
 
             try
             {

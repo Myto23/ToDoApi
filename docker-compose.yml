@@ -15,7 +15,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     depends_on:
       - db
     environment:
@@ -23,3 +23,10 @@ services:
     ports:
       - "5000:80"
 
+      
+  frontend:
+    build:
+      context: ../todo-app
+      dockerfile: ../todo-app/Dockerfile
+    ports:
+      - "8080:80"
